@@ -14,8 +14,6 @@ This project allows users to upload, manage, and organize files securely in the 
 
 ✏️ Rename and Delete files/folders
 
-🔍 Search functionality
-
 📱 Responsive UI (mobile + desktop friendly)
 
 ☁️ Cloud Storage via Supabase
