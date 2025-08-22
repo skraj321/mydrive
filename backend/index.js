@@ -11,9 +11,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Google Drive Clone Backend is running 🚀");
-});
+app.get("/",(req,res)=>{
+    res.send({
+        activeStatus : true,
+        error: false ,
+       })
+})
 app.get("/test-db", async (req, res) => {
   try {
     const { data, error } = await supabase.from("users").select("*").limit(1);
