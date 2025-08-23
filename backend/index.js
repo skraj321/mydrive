@@ -8,8 +8,15 @@ import fileRoutes from "./routes/fileRoutes.js";
 import folderRoutes from "./routes/folder.js";
 const app = express();
 
-app.use(cors());
 app.use(express.json());
+app.use(cors({
+  origin: [
+    "http://localhost:5000",
+    "https://mydrive-git-main-saheb-kumars-projects.vercel.app",
+    "https://mydrive-7i4y.vercel.app", 
+  ],
+  credentials: true
+}));
 
 app.get("/",(req,res)=>{
     res.send({
