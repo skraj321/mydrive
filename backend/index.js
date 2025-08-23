@@ -11,7 +11,7 @@ app.use(cors({
   origin: [
     "http://localhost:5173",
     "https://mydrive-beta.vercel.app",
-    "https://mydrive-642k.vercel.app/", 
+    "https://mydrive-642k.vercel.app", 
   ],
   credentials: false
 }));
