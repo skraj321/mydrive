@@ -14,7 +14,7 @@ app.use(cors({
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: false
+  credentials: true
 }));
 
 app.options("*", cors());
@@ -26,7 +26,7 @@ app.use(express.json());
 //     "https://mydrive-git-main-saheb-kumars-projects.vercel.app",
 //     "https://mydrive-7i4y.vercel.app", 
 //   ],
-//   credentials: false
+//   credentials: true
 // }));
 
 
