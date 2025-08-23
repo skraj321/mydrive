@@ -10,26 +10,13 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://mydrive-c5pw.vercel.app", // Your client application
-    "https://mydrive-git-main-saheb-kumars-projects.vercel.app", // Your API domain
+    "https://mydrive-git-main-saheb-kumars-projects.vercel.app",
+    "https://mydrive-c5pw.vercel.app", 
   ],
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true // Set this to true if you are using cookies/sessions
+  credentials: false
 }));
-
-
-app.options("*", cors());
-
 app.use(express.json());
-// app.use(cors({
-//   origin: [
-//     "http://localhost:5173",
-//     "https://mydrive-git-main-saheb-kumars-projects.vercel.app",
-//     "https://mydrive-7i4y.vercel.app", 
-//   ],
-//   credentials: true
-// }));
+
 
 
 app.get("/",(req,res)=>{
