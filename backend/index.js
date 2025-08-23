@@ -36,7 +36,6 @@ app.get("/",(req,res)=>{
     res.send({
         activeStatus : true,
         error: false ,
-        message: "API is working"
        })
 })
 app.get("/test-db", async (req, res) => {
