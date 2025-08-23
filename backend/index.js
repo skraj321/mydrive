@@ -18,7 +18,7 @@ app.use(cors({
   credentials: true // Set this to true if you are using cookies/sessions
 }));
 
-// This line is already correct, but it's good practice to have it here
+
 app.options("*", cors());
 
 app.use(express.json());
