@@ -15,8 +15,8 @@ app.use(cors({
   ],
   credentials: false
 }));
-app.use(express.json());
 
+app.use(express.json());
 
 
 app.get("/",(req,res)=>{
