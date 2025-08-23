@@ -10,14 +10,13 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://mydrive-7i4y.vercel.app"
+    "https://mydrive-c5pw.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: false
 }));
 
-// Ensure preflight requests are handled
 app.options("*", cors());
 
 app.use(express.json());
