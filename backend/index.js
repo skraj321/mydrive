@@ -10,7 +10,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://mydrive-git-main-saheb-kumars-projects.vercel.app",
+    "https://mydrive-beta.vercel.app",
     "https://mydrive-c5pw.vercel.app", 
   ],
   credentials: false
