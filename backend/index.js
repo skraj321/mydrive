@@ -7,16 +7,6 @@ import authRoutes from "./routes/auth.js";
 import fileRoutes from "./routes/fileRoutes.js";
 import folderRoutes from "./routes/folder.js";
 const app = express();
-
-app.use(express.json());
-// app.use(cors({
-//   origin: [
-//     "http://localhost:5173",
-//     "https://mydrive-git-main-saheb-kumars-projects.vercel.app",
-//     "https://mydrive-7i4y.vercel.app", 
-//   ],
-//   credentials: false
-// }));
 app.use(cors({
   origin: [
     "http://localhost:5173",
@@ -29,6 +19,16 @@ app.use(cors({
 
 // Ensure preflight requests are handled
 app.options("*", cors());
+
+app.use(express.json());
+// app.use(cors({
+//   origin: [
+//     "http://localhost:5173",
+//     "https://mydrive-git-main-saheb-kumars-projects.vercel.app",
+//     "https://mydrive-7i4y.vercel.app", 
+//   ],
+//   credentials: false
+// }));
 
 
 app.get("/",(req,res)=>{
