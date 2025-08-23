@@ -9,6 +9,7 @@ import {
 } from "../api";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
+import Sidebar from "./Sidebar"; // 👈 import Sidebar
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -18,17 +19,18 @@ const Profile = () => {
   const [currentFolderId, setCurrentFolderId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // 👈 search query
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  //  Logout
+  // Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
-  //  Get user + root files
+  // Get user + root files
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -42,7 +44,7 @@ const Profile = () => {
     fetchUser();
   }, []);
 
-  //  Get files
+  // Get files
   const fetchFiles = async (folderId) => {
     try {
       setLoading(true);
@@ -56,7 +58,7 @@ const Profile = () => {
     }
   };
 
-  //  Create folder
+  // Create folder
   const handleCreateFolder = async () => {
     if (!folderName) return;
     try {
@@ -69,7 +71,7 @@ const Profile = () => {
     }
   };
 
-  //  Upload file
+  // Upload file
   const handleUpload = async (e) => {
     e.preventDefault();
     try {
@@ -89,7 +91,7 @@ const Profile = () => {
     }
   };
 
-  //  Rename
+  // Rename
   const handleRename = async (fileId) => {
     const newName = prompt("Enter new file name:");
     if (!newName) return;
@@ -102,7 +104,7 @@ const Profile = () => {
     }
   };
 
-  //  Delete
+  // Delete
   const handleDelete = async (fileId) => {
     try {
       await deleteFile(fileId, token);
@@ -113,7 +115,7 @@ const Profile = () => {
     }
   };
 
-  //  Download
+  // Download
   const handleDownload = (file) => {
     const link = document.createElement("a");
     link.href = file.url;
@@ -122,107 +124,121 @@ const Profile = () => {
     link.click();
     link.remove();
   };
-  
+
+  // ✅ Filter files by search query
+  const filteredFiles = files.filter((f) =>
+    f.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header user={user} onLogout={handleLogout} />
-      
+    <div className="flex h-screen">
+      {/* Sidebar stays left */}
+      <Sidebar />
 
-      <div className="p-6 max-w-5xl mx-auto">
-        {/* Create Folder */}
-        <div className="mb-6 flex gap-2">
-          <input
-            type="text"
-            placeholder="Folder name"
-            value={folderName}
-            onChange={(e) => setFolderName(e.target.value)}
-            className="border p-2 rounded-lg flex-1"
-          />
-          <button
-            onClick={handleCreateFolder}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow"
-          >
-            + Folder
-          </button>
-        </div>
+      {/* Main content on right */}
+      <div className="flex-1 flex flex-col bg-gray-50">
+        {/* Header with search */}
+        <Header
+          user={user}
+          onLogout={handleLogout}
+          onSearch={setSearchQuery} // 👈 pass search handler
+        />
 
-        {/* Upload File */}
-        <div className="mb-6 flex gap-2">
-          <input
-            type="file"
-            onChange={(e) => setSelectedFile(e.target.files[0])}
-            className="border p-2 rounded-lg flex-1"
-          />
-          <button
-            onClick={handleUpload}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow"
-          >
-            ⬆ Upload
-          </button>
-        </div>
+        <div className="p-6 max-w-5xl mx-auto overflow-y-auto flex-1">
+          {/* Create Folder */}
+          <div className="mb-6 flex gap-2">
+            <input
+              type="text"
+              placeholder="Folder name"
+              value={folderName}
+              onChange={(e) => setFolderName(e.target.value)}
+              className="border p-2 rounded-lg flex-1"
+            />
+            <button
+              onClick={handleCreateFolder}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow"
+            >
+              + Folder
+            </button>
+          </div>
 
-        {/* Files List */}
-        <h3 className="text-2xl font-bold mb-4">📂 Files & Folders</h3>
-        {loading ? (
-          <p>Loading...</p>
-        ) : files.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {files.map((f) => (
-              <div
-                key={f.id}
-                className="p-4 border rounded-xl shadow hover:shadow-lg bg-white relative"
-              >
-                <span className="font-semibold">{f.name}</span>
-                <span className="text-sm text-gray-500 block">
-                  {f.mime_type || "Folder"}
-                </span>
+          {/* Upload File */}
+          <div className="mb-6 flex gap-2">
+            <input
+              type="file"
+              onChange={(e) => setSelectedFile(e.target.files[0])}
+              className="border p-2 rounded-lg flex-1"
+            />
+            <button
+              onClick={handleUpload}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow"
+            >
+              ⬆ Upload
+            </button>
+          </div>
 
-                {/* Three-dot menu */}
-                <div className="absolute top-3 right-3">
-                  <button
-                    onClick={() => setMenuOpen(menuOpen === f.id ? null : f.id)}
-                    className="text-xl font-bold cursor-pointer"
-                  >
-                    ⋮
-                  </button>
-                  {menuOpen === f.id && (
-                    <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-10">
-                      <ul className="py-2">
-                        {f.url && (
+          {/* Files List */}
+          <h3 className="text-2xl font-bold mb-4">📂 Files & Folders</h3>
+          {loading ? (
+            <p>Loading...</p>
+          ) : filteredFiles.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredFiles.map((f) => (
+                <div
+                  key={f.id}
+                  className="p-4 border rounded-xl shadow hover:shadow-lg bg-white relative"
+                >
+                  <span className="font-semibold">{f.name}</span>
+                  <span className="text-sm text-gray-500 block">
+                    {f.mime_type || "Folder"}
+                  </span>
+
+                  {/* Three-dot menu */}
+                  <div className="absolute top-3 right-3">
+                    <button
+                      onClick={() =>
+                        setMenuOpen(menuOpen === f.id ? null : f.id)
+                      }
+                      className="text-xl font-bold cursor-pointer"
+                    >
+                      ⋮
+                    </button>
+                    {menuOpen === f.id && (
+                      <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-10">
+                        <ul className="py-2">
+                          {f.url && (
+                            <li
+                              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={() => handleDownload(f)}
+                            >
+                              ⬇ Download
+                            </li>
+                          )}
                           <li
                             className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                            onClick={() => handleDownload(f)}
+                            onClick={() => handleRename(f.id)}
                           >
-                            ⬇ Download
+                            ✏ Rename
                           </li>
-                        )}
-                        <li
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleRename(f.id)}
-                        >
-                          ✏ Rename
-                        </li>
-                        <li
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600"
-                          onClick={() => handleDelete(f.id)}
-                        >
-                          🗑 Delete
-                        </li>
-                      </ul>
-                    </div>
-                  )}
+                          <li
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600"
+                            onClick={() => handleDelete(f.id)}
+                          >
+                            🗑 Delete
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-500">No files yet.</p>
-        )}
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">No files found.</p>
+          )}
+        </div>
       </div>
-      
     </div>
-    
   );
 };
 

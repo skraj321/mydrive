@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { signupUser } from "../api";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -14,7 +16,10 @@ export default function Signup() {
     try {
       const res = await signupUser(form);
       localStorage.setItem("token", res.token);
-      navigate("/profile");
+      toast.success("Signup successful!");
+      setTimeout(() => {
+        navigate("/profile");
+      }, 1500);
     } catch (err) {
       setMessage(err.response?.data?.message || "Signup failed");
     }
@@ -22,6 +27,7 @@ export default function Signup() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <ToastContainer />
       <form onSubmit={handleSignup} className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
         <input

@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
+  getProfile,
   getRootFolder,
   getFilesInFolder,
   deleteFile,
   renameFile,
 } from "../api";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
 
 const FilesPage = ({ token }) => {
+  const [user, setUser] = useState(null);
   const [files, setFiles] = useState([]);
   const [folderId, setFolderId] = useState(null);
   const [editingFileId, setEditingFileId] = useState(null);
@@ -15,6 +19,23 @@ const FilesPage = ({ token }) => {
   const [openMenuId, setOpenMenuId] = useState(null); // track which dropdown is open
   const navigate = useNavigate();
 
+   const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+   // Get user + root files
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const res = await getProfile(token);
+          setUser(res.user);
+          fetchFiles(null);
+        } catch (err) {
+          console.error("Profile fetch error:", err);
+        }
+      };
+      fetchUser();
+    }, []);
   const fetchFiles = async () => {
     try {
       const rootRes = await getRootFolder(token);
@@ -78,13 +99,14 @@ const FilesPage = ({ token }) => {
   };
 
   return (
+    <div className="flex h-screen">
+      {/* Sidebar stays left */}
+      <Sidebar />
     <div className="p-6">
-      <h2
-        className="text-3xl font-bold mb-6 cursor-pointer"
-        onClick={() => navigate("/profile")}
-      >
-        📂 Your Files
-      </h2>
+       <Header
+                user={user}
+                onLogout={handleLogout}
+              />
 
       {files.length === 0 ? (
         <p className="text-gray-500">No files available in this folder.</p>
@@ -188,6 +210,7 @@ const FilesPage = ({ token }) => {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { loginUser } from "../api";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Signin() {
   const navigate = useNavigate();
@@ -14,15 +16,18 @@ export default function Signin() {
     try {
       const res = await loginUser(form);
       localStorage.setItem("token", res.token);
-      alert("Login successful!");
-      navigate("/profile");
+      toast.success("Login successful!");
+      setTimeout(() => {
+        navigate("/profile");
+      }, 1500);
     } catch (err) {
-      setMessage(err.response?.data?.message || "Login failed");
+      setMessage(err.response?.data?.message || "Login failed or invalid credentials");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <ToastContainer autoClose={3000} />
       <form onSubmit={handleSignin} className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>
         <input
