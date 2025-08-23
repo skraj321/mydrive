@@ -1,6 +1,6 @@
 // src/api.js
 import axios from "axios";
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "https://mydrive-beta.vercel.app";
 
 // =============== AUTH ==================
 export const signupUser = async (data) => {
