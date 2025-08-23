@@ -1,21 +1,21 @@
 // src/api.js
 import axios from "axios";
-
-const API_URL = "https://mydrive-git-main-saheb-kumars-projects.vercel.app/api";
+import dotenv from "dotenv";
+dotenv.config();
 
 // =============== AUTH ==================
 export const signupUser = async (data) => {
-  const res = await axios.post(`${API_URL}/auth/signup`, data);
+  const res = await axios.post(`${process.env.API_URL}/api/auth/signup`, data);
   return res.data;
 };
 
 export const loginUser = async (data) => {
-  const res = await axios.post(`${API_URL}/auth/login`, data);
+  const res = await axios.post(`${process.env.API_URL}/api/auth/login`, data);
   return res.data;
 };
 
 export const getProfile = async (token) => {
-  const res = await axios.get(`${API_URL}/auth/profile`, {
+  const res = await axios.get(`${process.env.API_URL}/api/auth/profile`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
@@ -23,7 +23,7 @@ export const getProfile = async (token) => {
 
 // =============== FOLDERS ==================
 export const getRootFolder = async (token) => {
-  const res = await axios.get(`${API_URL}/folders/root`, {
+  const res = await axios.get(`${process.env.API_URL}/api/folders/root`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
@@ -31,7 +31,7 @@ export const getRootFolder = async (token) => {
 
 export const createFolder = async (name, parentId, token) => {
   const res = await axios.post(
-    `${API_URL}/folders/create`,
+    `${process.env.API_URL}/api/folders/create`,
     { name, parentId },
     {
       headers: { Authorization: `Bearer ${token}` },
@@ -41,7 +41,7 @@ export const createFolder = async (name, parentId, token) => {
 };
 
 export const getFilesInFolder = async (folderId, token) => {
-  const res = await axios.get(`${API_URL}/files/file/${folderId}/getfiles`, {
+  const res = await axios.get(`${process.env.API_URL}/api/files/file/${folderId}/getfiles`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
@@ -49,7 +49,7 @@ export const getFilesInFolder = async (folderId, token) => {
 
 // =============== FILES ==================
 export const uploadFile = async (formData, token) => {
-  const res = await axios.post(`${API_URL}/files/upload`, formData, {
+  const res = await axios.post(`${process.env.API_URL}/api/files/upload`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "multipart/form-data",
@@ -60,7 +60,7 @@ export const uploadFile = async (formData, token) => {
 
 export const renameFile = async (fileId, newName, token) => {
   const res = await axios.patch(
-    `${API_URL}/files/file/${fileId}/rename`,
+    `${process.env.API_URL}/api/files/file/${fileId}/rename`,
     { newName },
     {
       headers: { Authorization: `Bearer ${token}` },
@@ -70,7 +70,7 @@ export const renameFile = async (fileId, newName, token) => {
 };
 
 export const deleteFile = async (fileId, token) => {
-  const res = await axios.delete(`${API_URL}/files/file/${fileId}`, {
+  const res = await axios.delete(`${process.env.API_URL}/api/files/file/${fileId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
