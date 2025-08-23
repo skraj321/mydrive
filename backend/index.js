@@ -10,13 +10,15 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://mydrive-c5pw.vercel.app"
+    "https://mydrive-c5pw.vercel.app", // Your client application
+    "https://mydrive-git-main-saheb-kumars-projects.vercel.app", // Your API domain
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
+  credentials: true // Set this to true if you are using cookies/sessions
 }));
 
+// This line is already correct, but it's good practice to have it here
 app.options("*", cors());
 
 app.use(express.json());
